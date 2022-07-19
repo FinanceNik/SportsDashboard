@@ -4,6 +4,7 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 import Styles
+import DataHandler as dh
 import warnings
 warnings.filterwarnings('ignore')
 warnings.simplefilter("ignore", UserWarning)
@@ -15,7 +16,7 @@ sidebar = html.Div(
     [
         html.H1("Sports\nDashboard", style={'fontSize': '46px', 'fontWeight': 'bold'}),
         html.Hr(style={'borderColor': Styles.greys[3]}),
-        html.H2("Type", className="lead", style={'fontSize': '30px'}),
+        html.H2("Section", className="lead", style={'fontSize': '30px'}),
         html.Hr(style={'borderColor': Styles.greys[3]}),
         dbc.Nav(
             [
@@ -47,17 +48,35 @@ def render_page_content(pathname):
             html.Div([
                 html.H1('Your Cycling Performance'),
             ], style={'width': '100%', 'display': 'inline-block', 'align': 'right', 'padding': Styles.graph_padding}),
+            html.Hr(),
             # Display the first row of key performance indicators, triggered via the kpiboxes function located in the
             # Styles module.
             html.Div([
                 # Show the risk willingness score.
-                Styles.kpiboxes('Name:', 1000, Styles.colorPalette[0]),
-                Styles.kpiboxes('Name:', 1000, Styles.colorPalette[1]),
-                Styles.kpiboxes('Name:', 1000, Styles.colorPalette[2]),
-                Styles.kpiboxes('Name:', 1000, Styles.colorPalette[3]),
+                Styles.kpiboxes('Total Activities:', 1000, Styles.colorPalette[0]),
+                Styles.kpiboxes('Total Time:', 1000, Styles.colorPalette[1]),
+                Styles.kpiboxes('Total Distance:', 1000, Styles.colorPalette[2]),
+                Styles.kpiboxes('Total Elevation:', 1000, Styles.colorPalette[3]),
 
             ]),
             html.Hr(),
+            html.Div([
+                # Dash Core Components Graph element.
+                dcc.Graph(
+                    id='Portfolio Backtesting Graph',
+                    # Trigger the function in the Data_Handler module that retrieves both the date values as well as
+                    # the backtesting values.
+                    figure={'data': [{'x': [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                                      'y': [1, 2, 6, 7, 5, 7, 2, 8, 10],
+                                      'type': 'bar', 'title': "Performance per Month (past 3 years)",
+                                      'mode': 'line',
+                                      'marker': {'color': Styles.colorPalette[0]},
+                                      'line': {'width': 8}}],
+                            'layout': {'title': 'Performance per Month (past 3 years)',
+                                       'xaxis': {'title': 'Time as Date Stamps', 'tickangle': 0},
+                                       'yaxis': {'title': 'Portfolio Value'}}}
+                ),
+            ], style=Styles.STYLE(100)),
             ])
 
     if pathname == "/xxx":

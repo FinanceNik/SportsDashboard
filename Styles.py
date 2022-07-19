@@ -16,7 +16,7 @@ colorPalette = {
     9: ['#2A4747', '#439775', '#48BF84', '#E0BAD7'],
     }
 
-colorPalette = colorPalette[6]
+colorPalette = colorPalette[9]
 
 strongGreen = '#37D151'
 strongRed = '#FF5B5B'
