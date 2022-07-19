@@ -1,36 +1,33 @@
 from dash import html
 from dash import dash_table
 
-greys = ['#2b2b2b', '#3b3b3b', '#cfcfcf']
-lightgrey = '#f0f0f0'
-color_1 = '#5C4A72'
-color_2 = '#F3B05A'
-color_3 = '#F46A4E'
+greys = ['#2b2b2b', '#3b3b3b', '#cfcfcf', '#f0f0f0']
 
-lightRed = '#FF9F9F'
+colorPalette = {
+    0: ['#495C83', '#7A86B6', '#A8A4CE', '#C8B6E2'],
+    1: ['#06283D', '#1363DF', '#47B5FF', '#DFF6FF'],
+    2: ['#354259', '#CDC2AE', '#ECE5C7', '#C2DED1'],
+    3: ['#363062', '#4D4C7D', '#827397', '#E9D5CA'],
+    4: ['#0B132B', '#1C2541', '#3A506B', '#5BC0BE'],
+    5: ['#993955', '#AE76A6', '#A3C3D9', '#CCD6EB'],
+    6: ['#5E5C6C', '#0B5563', '#A2BCE0', '#5299D3'],
+    7: ['#0D1F2D', '#546A7B', '#9EA3B0', '#FAE1DF'],
+    8: ['#373F51', '#008DD5', '#F56476', '#E43F6F'],
+    9: ['#2A4747', '#439775', '#48BF84', '#E0BAD7'],
+    }
+
+colorPalette = colorPalette[6]
+
 strongGreen = '#37D151'
-lightGreen = '#99E7A6'
-mainColor = '#2F4050'
-subColor1 = '#F2F2F2'
-yellow = '#FFC000'
-accgreen = '#00D2AA'
-accblue = '#137EB3'
 strongRed = '#FF5B5B'
-darkgrey = '#404040'
-blues1 = '#002060'
-blues2 = '#305496'
-blues3 = '#6CA6DA'
-blues4 = '#9BC2E6'
-blues5 = '#DDEBF7'
-kmucolor = '#13b3c2'
 
 graph_padding = '5px'
 
 HEIGHT = 250
 
-boxshadow = '5px 4px 5px 5px lightgrey'
+boxShadow = '5px 4px 5px 5px lightgrey'
 
-TAB_STYLE = {'boxShadow': boxshadow,
+TAB_STYLE = {'boxShadow': boxShadow,
                       'borderStyle': '',
                       'borderColor': greys[2],
                       'fontSize': '20px',
@@ -55,14 +52,14 @@ CONTENT_STYLE = {"marginLeft": "18rem", "marginRight": "2rem", "padding": "2rem 
 
 def STYLE(width):
     return{'width': f'{width}%', 'display': 'inline-block', 'align': 'center', 'padding': '10px',
-             'boxShadow': boxshadow,
+             'boxShadow': boxShadow,
              'borderRadius': '10px',
              'overflow': 'hidden'}
 
 
 def STYLE_MINI():
     return{'width': '15%', 'display': 'inline-block', 'align': 'right', 'padding': '1px',
-           'boxShadow': boxshadow,
+           'boxShadow': boxShadow,
            'borderRadius': '10px',
            'overflow': 'hidden',
            'height': 250}
@@ -112,12 +109,12 @@ def conditional_box(id, formula):
             style_header={'fontSize': '18px',
                           'fontFamily': 'Calibri',
                           'border': '1px solid white',
-                          'backgroundColor': blues1,
+                          'backgroundColor': colorPalette[0],
                           'fontWeight': 'bold',
                           'color': 'white'},
             style_data={'fontFamily': 'Calibri',
                         'border': '1px solid white',
-                        'backgroundColor': blues1,
+                        'backgroundColor': colorPalette[0],
                         'color': 'white',
                         'fontSize': '22px'},
             style_table={'border': '1px solid lightgrey',
@@ -133,40 +130,3 @@ def conditional_box(id, formula):
                                     ]
 
         )], style={'width': '25%', 'display': 'inline-block', 'align': 'left', 'padding': "20px"})
-
-
-def reversed_conditional_box(id, formula):
-    return html.Div([
-        dash_table.DataTable(
-            id='kpi_table_TV',
-            columns=[{'name': id, 'id': id}],
-            style_cell_conditional=[],
-            style_as_list_view=False,
-            style_cell={'padding': '10px', 'textAlign': 'left'},
-            data=[{id: formula}],
-            editable=False,
-            style_header={'fontSize': '18px',
-                          'fontFamily': 'Calibri',
-                          'border': '1px solid white',
-                          'backgroundColor': blues1,
-                          'fontWeight': 'bold',
-                          'color': 'white'},
-            style_data={'fontFamily': 'Calibri',
-                        'border': '1px solid white',
-                        'backgroundColor': blues1,
-                        'color': 'white',
-                        'fontSize': '22px'},
-            style_table={'border': '1px solid lightgrey',
-                         'borderRadius': '10px',
-                         'overflow': 'hidden',
-                         'boxShadow': '5px 4px 5px 5px lightgrey'},
-            style_data_conditional=[{'if': {'filter_query': f'{{{id}}} <= 0',
-                                            'column_id': f'{id}'},
-                                     'backgroundColor': strongGreen, 'color': 'black'},
-                                    {'if': {'filter_query': f'{{{id}}} > 0',
-                                            'column_id': f'{id}'},
-                                     'backgroundColor': strongRed, 'color': 'black'},
-                                    ]
-
-        )], style={'width': '25%', 'display': 'inline-block', 'align': 'left', 'padding': "20px"})
-
