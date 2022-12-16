@@ -25,9 +25,9 @@ graph_padding = '5px'
 
 HEIGHT = 250
 
-boxShadow = '5px 4px 5px 5px lightgrey'
+boxshadow = '5px 4px 5px 5px lightgrey'
 
-TAB_STYLE = {'boxShadow': boxShadow,
+TAB_STYLE = {'boxShadow': boxshadow,
                       'borderStyle': '',
                       'borderColor': greys[2],
                       'fontSize': '20px',
@@ -52,14 +52,14 @@ CONTENT_STYLE = {"marginLeft": "18rem", "marginRight": "2rem", "padding": "2rem 
 
 def STYLE(width):
     return{'width': f'{width}%', 'display': 'inline-block', 'align': 'center', 'padding': '10px',
-             'boxShadow': boxShadow,
+             'boxShadow': boxshadow,
              'borderRadius': '10px',
              'overflow': 'hidden'}
 
 
 def STYLE_MINI():
     return{'width': '15%', 'display': 'inline-block', 'align': 'right', 'padding': '1px',
-           'boxShadow': boxShadow,
+           'boxShadow': boxshadow,
            'borderRadius': '10px',
            'overflow': 'hidden',
            'height': 250}
