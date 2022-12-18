@@ -37,8 +37,13 @@ def mostUsedActivityType(year):
     dictActivityInstances = dict(sorted(dictActivityInstances.items(), key=lambda item: item[1], reverse=True))
     keys = list(dictActivityInstances.keys())
     values = list(dictActivityInstances.values())
+    totals = sum(values)
+    percentages = []
+    for i in values:
+        percent = round(i / totals, 3)
+        percentages.append(percent)
 
-    return keys, values
+    return keys, values, percentages, totals
 
 
 class Totals:
