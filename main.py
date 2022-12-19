@@ -2,13 +2,11 @@ import dash_bootstrap_components as dbc
 import Styles
 import DataHandler as dh
 import base64
-import datetime
 import io
 import dash
 from dash.dependencies import Input, Output, State
 from dash import dcc, html, dash_table
 import pandas as pd
-from datetime import datetime  # for getting the current year
 import warnings
 warnings.filterwarnings('ignore')
 warnings.simplefilter("ignore", UserWarning)
@@ -17,12 +15,9 @@ app = dash.Dash(__name__, suppress_callback_exceptions=True,
                 external_stylesheets=[dbc.themes.BOOTSTRAP],
                 url_base_pathname='/')
 
-
-currentYear = int(datetime.today().strftime('%Y'))
-
 sidebar = html.Div(
     [
-        html.H1(f"Your {currentYear}\n in Review", style={'fontSize': '46px', 'fontWeight': 'bold'}),
+        html.H1(f"Your {dh.currentYear}\n in Review", style={'fontSize': '46px', 'fontWeight': 'bold'}),
         html.Hr(style={'borderColor': Styles.greys[3]}),
         html.H2("Section", className="lead", style={'fontSize': '30px'}),
         html.Hr(style={'borderColor': Styles.greys[3]}),
@@ -44,6 +39,8 @@ content = html.Div(id="page-content", style=Styles.CONTENT_STYLE)
 
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content],
                       style={'backgroundColor': 'white'})
+
+allActivities_Totals = aat = dh.Totals("all", 2022)
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
@@ -77,8 +74,31 @@ def render_page_content(pathname):
                 html.H1('Your Cycling Performance'),
             ], style={'width': '100%', 'display': 'inline-block', 'align': 'right', 'padding': Styles.graph_padding}),
             html.Hr(),
-            # Display the first row of key performance indicators, triggered via the kpiboxes function located in the
-            # Styles module.
+            html.Div(
+                dash_table.DataTable(
+                    id='stat_table',
+                    columns=[{'name': i, 'id': i} for i in dh.mostUsedActivityType(dh.currentYear)[4]],
+                    style_cell_conditional=[],
+                    style_as_list_view=False,
+                    style_cell={'padding': '5px', 'border-radius': '50px'},
+                    style_header={'backgroundColor': Styles.colorPalette[0], 'fontWeight': 'bold', 'color': 'white',
+                                  'border': '1px solid grey', 'height': '50px', 'font-size': '13px'},
+                    style_table={'border': '1px solid lightgrey',
+                                 'borderRadius': '10px',
+                                 'overflow': 'hidden',
+                                 'boxShadow': '5px 4px 5px 5px lightgrey'},
+                    style_data={'border': '1px solid grey', 'font-size': '12px'},
+                    data=dh.mostUsedActivityType(dh.currentYear)[4].to_dict('records')), style=Styles.STYLE(49)),
+            html.Div([''], style=Styles.FILLER()),
+            html.Div([
+                dcc.Graph(
+                    id='Activity Type Distribution',
+                    figure={'data': [
+                        {'values': dh.mostUsedActivityType(dh.currentYear)[2],
+                         'labels': dh.mostUsedActivityType(dh.currentYear)[0],
+                         'marker': {'colors': dh.mostUsedActivityType(dh.currentYear)[5]},
+                         'type': 'pie', 'layout': {'margin': dict(t=0,b=100,l=0,r=0)}}]}),
+            ], style=Styles.STYLE_PIE(49)),
             html.Div([
                 # Show the risk willingness score.
                 Styles.kpiboxes('Total Activities:', 1000, Styles.colorPalette[0]),
@@ -106,6 +126,7 @@ def render_page_content(pathname):
                 ),
             ], style=Styles.STYLE(100)),
             ])
+
     if pathname == "/about":
         return html.Div(children=[
             html.Div([html.H1('About the Creators...')], style={"textAlign": "center"}),

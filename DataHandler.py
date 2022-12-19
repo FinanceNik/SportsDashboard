@@ -1,12 +1,13 @@
 import pandas as pd
 from datetime import datetime  # for getting the current year
 
+import Styles
+
 currentYear = int(datetime.today().strftime('%Y'))
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
     df = pd.read_csv('activities.csv')
-    # print(df.columns[:], "\n", "\n", "\n")
     df['Activity Date'] = pd.to_datetime(df['Activity Date'])
     df.insert(1, "year", "")
     df['year'] = df['Activity Date'].dt.year
@@ -43,8 +44,16 @@ def mostUsedActivityType(year):
         percent = round(i / totals, 3)
         percentages.append(percent)
 
-    return keys, values, percentages, totals
+    percentages_for_table = [f"{round(i*100, 2)}%" for i in percentages]
 
+    dash_table_df = pd.DataFrame(
+                        {'Activity Type': keys,
+                         'Percentage': percentages_for_table
+                         })
+    colorList = Styles.purple_list[:len(keys)]
+    return keys, values, percentages, totals, dash_table_df, colorList
+
+# mostUsedActivityType(2022)
 
 class Totals:
     def __init__(self, activityType: str, year: int):
@@ -72,8 +81,8 @@ class Totals:
 
 
 class Max:
-    def __init__(self, activityType: str, startYear: int):
-        df = dataCleaner(activityType, startYear)
+    def __init__(self, activityType: str, year: int):
+        df = dataCleaner(activityType, year)
         self.maxElevationGain = df['Elevation Gain'].max()
         self.maxMovingTime = df['Moving Time'].max()
         self.maxActivityDistance = df['Distance'].max()
@@ -100,5 +109,17 @@ class Max:
         return self.maxElevation
 
 
-allActivities = Max("Ride", 2022)
+def monthly_kpi(activityType, year, kpi):
+    df = dataCleaner(activityType, year)
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    volumes = []
+    for month in range(1, 13):
+        volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum())
+        volumes.append(volume)
+    return months, volumes
+
+
+
+
+# allActivities = Max("Ride", 2022)
 # print(allActivities.get_maxElevationGain())  # THIS IS HOW U CALL THE REFERRED TO OBJECT

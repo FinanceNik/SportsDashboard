@@ -16,6 +16,9 @@ colorPalette = {
     9: ['#2A4747', '#439775', '#48BF84', '#E0BAD7'],  # greenish and very nice
     }
 
+purple_list = ['#495C83', '#7A86B6', '#A8A4CE', '#C8B6E2', '#363062', '#4D4C7D',
+               '#827397', '#E9D5CA', '#495C83', '#7A86B6', '#A8A4CE', '#C8B6E2']
+
 colorPalette = colorPalette[0]
 
 strongGreen = '#37D151'
@@ -55,6 +58,14 @@ def STYLE(width):
              'boxShadow': boxshadow,
              'borderRadius': '10px',
              'overflow': 'hidden'}
+
+
+def STYLE_PIE(width):
+    return{'width': f'{width}%', 'display': 'inline-block', 'align': 'center', 'padding': '10px',
+           'boxShadow': boxshadow,
+           'height': '30vh',
+           'borderRadius': '10px',
+           'overflow': 'hidden'}
 
 
 def STYLE_MINI():
