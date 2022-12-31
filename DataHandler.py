@@ -55,6 +55,7 @@ def mostUsedActivityType(year):
 
 # mostUsedActivityType(2022)
 
+
 class Totals:
     def __init__(self, activityType: str, year: int):
         df = dataCleaner(activityType, year)
@@ -109,17 +110,31 @@ class Max:
         return self.maxElevation
 
 
-def monthly_kpi(activityType, year, kpi):
+def monthly_kpi_count(activityType, year, kpi):
     df = dataCleaner(activityType, year)
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     volumes = []
     for month in range(1, 13):
-        volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum())
+        volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].count())
         volumes.append(volume)
     return months, volumes
 
 
+def monthly_kpi_sum(activityType, year, kpi):
+    df = dataCleaner(activityType, year)
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    volumes = []
+    if kpi == "Moving Time":
+        for month in range(1, 13):
+            volume = round(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum() / 3600, 2)
+            volumes.append(volume)
+        return months, volumes
+    else:
+        for month in range(1, 13):
+            volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum())
+            volumes.append(volume)
+        return months, volumes
 
 
-# allActivities = Max("Ride", 2022)
-# print(allActivities.get_maxElevationGain())  # THIS IS HOW U CALL THE REFERRED TO OBJECT
+allActivities = Totals("all", currentYear)
+# print(allActivities.get_totalActivityTime())  # THIS IS HOW U CALL THE REFERRED TO OBJECT
