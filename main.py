@@ -8,6 +8,8 @@ from dash.dependencies import Input, Output, State
 from dash import dcc, html, dash_table
 import pandas as pd
 import warnings
+import page_about
+
 warnings.filterwarnings('ignore')
 warnings.simplefilter("ignore", UserWarning)
 
@@ -43,6 +45,13 @@ app.layout = html.Div([dcc.Location(id="url"), sidebar, content],
 allActivities_Totals = aat = dh.Totals("all", 2022)
 
 
+@app.callback(
+    dash.dependencies.Output('dd-output-container', 'children'),
+    [dash.dependencies.Input('Sports Select', 'value')])
+def update_outputt(value):
+    print(value)
+
+
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname == "/":
@@ -70,226 +79,15 @@ def render_page_content(pathname):
         ])
     elif pathname == "/review":
         return html.Div(children=[
-            html.Div([
-                html.H1('Your Overall Performance'),
-            ], style={'width': '100%', 'display': 'inline-block', 'align': 'right', 'padding': Styles.graph_padding}),
-            html.Hr(),
-            html.Div([
-                dcc.Graph(
-                    id='Activity Type Distribution',
-                    figure={'data': [
-                        {'values': dh.mostUsedActivityType(dh.currentYear)[2],
-                         'labels': dh.mostUsedActivityType(dh.currentYear)[0],
-                         'marker': {'colors': dh.mostUsedActivityType(dh.currentYear)[5]},
-                         'type': 'pie', 'layout': {'margin': dict(t=0, b=100, l=0, r=0)}}]}),
-            ], style=Styles.STYLE(100)),
-            html.Div([
-                Styles.kpiboxes('Total Activities:', dh.allActivities.get_nrOfActivities(), Styles.colorPalette[0]),
-                Styles.kpiboxes('Total Time (in hrs):', dh.allActivities.get_totalActivityTime(), Styles.colorPalette[1]),
-                Styles.kpiboxes('Total Distance:', dh.allActivities.get_totalActivityDistance(), Styles.colorPalette[2]),
-                Styles.kpiboxes('Total Elevation:', dh.allActivities.get_totalElevationGain(), Styles.colorPalette[3]),
-            ]),
-            html.Hr(),
-            html.Div([
-                # Dash Core Components Graph element.
-                dcc.Graph(
-                    id='Monthly Activities',
-                    # Trigger the function in the Data_Handler module that retrieves both the date values as well as
-                    # the backtesting values.
-                    figure={'data': [{'x': dh.monthly_kpi_count(activityType="all",
-                                                                year=dh.currentYear,
-                                                                kpi="Activity Type")[0],
-                                      'y': dh.monthly_kpi_count(activityType="all",
-                                                                year=dh.currentYear,
-                                                                kpi="Activity Type")[1],
-                                      'type': 'bar', 'title': f"Number of Activities per Month in {dh.currentYear}",
-                                      'mode': 'line',
-                                      'marker': {'color': Styles.colorPalette[0]},
-                                      'line': {'width': 8}}],
-                            'layout': {'title': f"Number of Activities per Month in {dh.currentYear}",
-                                       'xaxis': {'title': 'Time in Months', 'tickangle': 0},
-                                       'yaxis': {'title': 'Number of Activies'}}}
-                ),
-            ], style=Styles.STYLE(49)),
-            html.Div([''], style=Styles.FILLER()),
-            html.Div([
-                # Dash Core Components Graph element.
-                dcc.Graph(
-                    id='Monthy Distance',
-                    # Trigger the function in the Data_Handler module that retrieves both the date values as well as
-                    # the backtesting values.
-                    figure={'data': [{'x': dh.monthly_kpi_sum(activityType="all",
-                                                                year=dh.currentYear,
-                                                                kpi="Distance")[0],
-                                      'y': dh.monthly_kpi_sum(activityType="all",
-                                                                year=dh.currentYear,
-                                                                kpi="Distance")[1],
-                                      'type': 'bar', 'title': f"Monthly Distance in {dh.currentYear}",
-                                      'mode': 'line',
-                                      'marker': {'color': Styles.colorPalette[1]},
-                                      'line': {'width': 8}}],
-                            'layout': {'title': f"Monthly Distance in {dh.currentYear}",
-                                       'xaxis': {'title': 'Time in Months', 'tickangle': 0},
-                                       'yaxis': {'title': 'Distance in KM'}}}
-                ),
-            ], style=Styles.STYLE(49)),
-            html.Hr(),
-            html.Div([
-                # Dash Core Components Graph element.
-                dcc.Graph(
-                    id='Monthy Moving Time',
-                    # Trigger the function in the Data_Handler module that retrieves both the date values as well as
-                    # the backtesting values.
-                    figure={'data': [{'x': dh.monthly_kpi_sum(activityType="all",
-                                                              year=dh.currentYear,
-                                                              kpi="Moving Time")[0],
-                                      'y': dh.monthly_kpi_sum(activityType="all",
-                                                              year=dh.currentYear,
-                                                              kpi="Moving Time")[1],
-                                      'type': 'bar', 'title': f"Monthly Moving Time in {dh.currentYear}",
-                                      'mode': 'line',
-                                      'marker': {'color': Styles.colorPalette[2]},
-                                      'line': {'width': 8}}],
-                            'layout': {'title': f"Monthly Moving Time in {dh.currentYear}",
-                                       'xaxis': {'title': 'Time in Months', 'tickangle': 0},
-                                       'yaxis': {'title': 'Moving time in Hours'}}}
-                ),
-            ], style=Styles.STYLE(49)),
-            html.Div([''], style=Styles.FILLER()),
-            html.Div([
-                # Dash Core Components Graph element.
-                dcc.Graph(
-                    id='Monthy Elevation',
-                    # Trigger the function in the Data_Handler module that retrieves both the date values as well as
-                    # the backtesting values.
-                    figure={'data': [{'x': dh.monthly_kpi_sum(activityType="all",
-                                                              year=dh.currentYear,
-                                                              kpi="Elevation Gain")[0],
-                                      'y': dh.monthly_kpi_sum(activityType="all",
-                                                              year=dh.currentYear,
-                                                              kpi="Elevation Gain")[1],
-                                      'type': 'bar', 'title': f"Monthly Elevation in {dh.currentYear}",
-                                      'mode': 'line',
-                                      'marker': {'color': Styles.colorPalette[3]},
-                                      'line': {'width': 8}}],
-                            'layout': {'title': f"Monthly Elevation in {dh.currentYear}",
-                                       'xaxis': {'title': 'Time in Months', 'tickangle': 0},
-                                       'yaxis': {'title': 'Elevation Gain in m'}}}
-                ),
-            ], style=Styles.STYLE(49)),
-            ])
-
-    if pathname == "/about":
-        return html.Div(children=[
-            html.Div([html.H1('About the Creators...')], style={"textAlign": "center"}),
-            html.Hr(),
-            html.Div([], style={'width': f'{32}%', 'display': 'inline-block'}),
-            # Display a picture for each creator of the tool.
-            html.Div([
-                html.Div([html.Img(src=app.get_asset_url('image.jpg'))], style={'width': f'{17.3}%', 'display': 'inline-block'}),
-                ], style={'width': f'{17.3}%', 'display': 'inline-block', 'align': 'center', 'padding': '10px',
-                          'box-shadow': Styles.boxshadow,
-                          'borderRadius': '10px',
-                          'overflow': 'hidden'}),
-            html.Div([], style={'width': f'{1}%', 'display': 'inline-block'}),
-            html.Div([
-                html.Div([html.Img(src=app.get_asset_url('image_2.jpg'))],
-                         style={'width': f'{17.3}%', 'display': 'inline-block'}),
-            ], style={'width': f'{17.3}%', 'display': 'inline-block', 'align': 'center', 'padding': '10px',
-                      'box-shadow': Styles.boxshadow,
-                      'borderRadius': '10px',
-                      'overflow': 'hidden'}),
-            html.Div([], style={'width': f'{32}%', 'display': 'inline-block'}),
-            html.Div([], style={'width': f'{32}%', 'display': 'inline-block'}),
-            # Short descriptions of the creators and what they are specialized in.
-            html.Div([
-                html.Div([html.I("HSLU")], style={'textAlign': 'center'}),
-                html.Div([html.I("MSc Banking & Finance")], style={'textAlign': 'center'}),
-                html.Div([html.I("3rd Semester")], style={'textAlign': 'center'}),
-                html.Div(html.Hr()),
-                html.Div([html.I("Specialization:")], style={'textAlign': 'center', 'fontWeight': 'bold'}),
-                html.Div([html.I("Data Science")], style={'textAlign': 'center'}),
-            ], style={'textAlign': 'center', 'width': '17.3%', 'display': 'inline-block'}),
-            html.Div([], style={'width': f'{1}%', 'display': 'inline-block'}),
-            html.Div([
-                html.Div([html.I("HSLU")], style={'textAlign': 'center'}),
-                html.Div([html.I("MSc Banking & Finance")], style={'textAlign': 'center'}),
-                html.Div([html.I("3rd Semester")], style={'textAlign': 'center'}),
-                html.Div(html.Hr()),
-                html.Div([html.I("Specialization:")], style={'textAlign': 'center', 'fontWeight': 'bold'}),
-                html.Div([html.I("Asset Management")], style={'textAlign': 'center'}),
-            ], style={'textAlign': 'center', 'width': '17.3%', 'display': 'inline-block'}),
-            html.Hr(),
-            html.Div([html.H1('About the Tool...')], style={"textAlign": "center"}),
-            # Text body of what this tool was designed for and some background information.
-            html.Div([
-                html.P([
-                    'This tool has been created as the final project for a masters level university course in Banking and',
-                    html.Br(),
-                    'Finance at the Lucerne School of Business. The subject is called Module 11 and focuses on a',
-                    html.Br(),
-                    'research project with practical application. The tool is meant as a way for asset managers,',
-                    html.Br(),
-                    'banks, and brokers to automate the process of creating a client`s portfolio.',
-                    html.Br(),
-                    html.Br(),
-                    'Firstly, during an interview, the bank teller fills out a questionnaire with the respective client.',
-                    html.Br(),
-                    'This questionnaire establishes the client`s relationship towards risk tolerance and his or hers',
-                    html.Br(),
-                    'ability to take on risk and to absorb possible downfalls in the financial markets.',
-                    html.Br(),
-                    html.Br(),
-                    'Secondly, the client can select the asset classes in which it is desired to be invested in',
-                    html.Br(),
-                    'and furthermore give the respective asset classes a minimum weight in the portfolio',
-                    html.Br(),
-                    'if so is desired.',
-                    html.Br(),
-                    html.Br(),
-                    'Lastly, the inputs can be checked before submitting the data to the portfolio creation algorithm.',
-                    html.Br(),
-                    'The algorithm back-tests the performance of the selected assets and constraints when combined',
-                    html.Br(),
-                    'to a portfolio. The tool is calibrated to use the latest, scientifically established',
-                    html.Br(),
-                    'portfolio theory, namely Markowitz`s Modern Portfolio Theory and the accommodating',
-                    html.Br(),
-                    'Efficient Frontier. Moreover, the portfolio is selected based on a risk score',
-                    html.Br(),
-                    'that is established via the questionnaire`s input selections. The ',
-                    html.Br(),
-                    'selections splits the back-tested portfolios by volatility',
-                    html.Br(),
-                    'and chooses the portfolio with the highest Sharpe ratio',
-                    html.Br(),
-                    'that fits within a volatility bracket.',
-                        ]),
-                html.Hr()
-            ], style={'textAlign': 'center', 'width': '100%', 'display': 'inline-block'}),
-        ])
-
-    if pathname == "/xxx":
-        return html.Div(children=[
             dcc.Tabs(id='tabs-example', value='tab-1', children=[
-                dcc.Tab(label='1', value='tab-1'),
-                dcc.Tab(label='2', value='tab-2'),
-                dcc.Tab(label='3', value='tab-3'),
+                dcc.Tab(label='All Sports ', value='tab-1'),
+                dcc.Tab(label='Select Sports Type', value='tab-2'),
             ], style=Styles.TAB_STYLE),
             html.Hr(),
-            html.Div(id='tabs-example-content')
-        ])
+            html.Div(id='tabs-example-content')])
 
-
-@app.callback(Output('tabs-example-content', 'children'),
-              Input('tabs-example', 'value'))
-def render_content(tab):
-    if tab == 'tab-1':
-        return html.Div([])
-    elif tab == 'tab-2':
-        return html.Div([])
-    elif tab == 'tab-3':
-        return html.Div([])
+    elif pathname == "/about":
+        return page_about.render_content()
 
 
 def parse_contents(contents, filename, date):
@@ -322,6 +120,136 @@ def parse_contents(contents, filename, date):
             'wordBreak': 'break-all'
         })
     ])
+
+
+@app.callback(Output('tabs-example-content', 'children'),
+              Input('tabs-example', 'value'))
+def render_content(tab):
+    if tab == 'tab-1':
+        return html.Div([
+            html.Div(children=[
+                html.Div([
+                    html.H1('Your Overall Performance Across All Activities'),
+                ], style={'width': '100%', 'display': 'inline-block', 'align': 'right',
+                          'padding': Styles.graph_padding}),
+                html.Hr(),
+                html.Div([
+                    dcc.Graph(
+                        id='Activity Type Distribution',
+                        figure={'data': [
+                            {'values': dh.mostUsedActivityType(dh.currentYear)[2],
+                             'labels': dh.mostUsedActivityType(dh.currentYear)[0],
+                             'marker': {'colors': dh.mostUsedActivityType(dh.currentYear)[5]},
+                             'type': 'pie', 'layout': {'margin': dict(t=0, b=100, l=0, r=0)}}]}),
+                ], style=Styles.STYLE(100)),
+                html.Div([
+                    Styles.kpiboxes('Total Activities:', dh.allActivities.get_nrOfActivities(), Styles.colorPalette[0]),
+                    Styles.kpiboxes('Total Time (in hrs):', dh.allActivities.get_totalActivityTime(),
+                                    Styles.colorPalette[1]),
+                    Styles.kpiboxes('Total Distance:', dh.allActivities.get_totalActivityDistance(),
+                                    Styles.colorPalette[2]),
+                    Styles.kpiboxes('Total Elevation:', dh.allActivities.get_totalElevationGain(),
+                                    Styles.colorPalette[3]),
+                ]),
+                html.Hr(),
+                html.Div([
+                    # Dash Core Components Graph element.
+                    dcc.Graph(
+                        id='Monthly Activities',
+                        # Trigger the function in the Data_Handler module that retrieves both the date values as well as
+                        # the backtesting values.
+                        figure={'data': [{'x': dh.monthly_kpi_count(activityType="all",
+                                                                    year=dh.currentYear,
+                                                                    kpi="Activity Type")[0],
+                                          'y': dh.monthly_kpi_count(activityType="all",
+                                                                    year=dh.currentYear,
+                                                                    kpi="Activity Type")[1],
+                                          'type': 'bar', 'title': f"Number of Activities per Month in {dh.currentYear}",
+                                          'mode': 'line',
+                                          'marker': {'color': Styles.colorPalette[0]},
+                                          'line': {'width': 8}}],
+                                'layout': {'title': f"Number of Activities per Month in {dh.currentYear}",
+                                           'xaxis': {'title': 'Time in Months', 'tickangle': 0},
+                                           'yaxis': {'title': 'Number of Activies'}}}
+                    ),
+                ], style=Styles.STYLE(49)),
+                html.Div([''], style=Styles.FILLER()),
+                html.Div([
+                    # Dash Core Components Graph element.
+                    dcc.Graph(
+                        id='Monthy Distance',
+                        # Trigger the function in the Data_Handler module that retrieves both the date values as well as
+                        # the backtesting values.
+                        figure={'data': [{'x': dh.monthly_kpi_sum(activityType="all",
+                                                                  year=dh.currentYear,
+                                                                  kpi="Distance")[0],
+                                          'y': dh.monthly_kpi_sum(activityType="all",
+                                                                  year=dh.currentYear,
+                                                                  kpi="Distance")[1],
+                                          'type': 'bar', 'title': f"Monthly Distance in {dh.currentYear}",
+                                          'mode': 'line',
+                                          'marker': {'color': Styles.colorPalette[1]},
+                                          'line': {'width': 8}}],
+                                'layout': {'title': f"Monthly Distance in {dh.currentYear}",
+                                           'xaxis': {'title': 'Time in Months', 'tickangle': 0},
+                                           'yaxis': {'title': 'Distance in KM'}}}
+                    ),
+                ], style=Styles.STYLE(49)),
+                html.Hr(),
+                html.Div([
+                    # Dash Core Components Graph element.
+                    dcc.Graph(
+                        id='Monthy Moving Time',
+                        # Trigger the function in the Data_Handler module that retrieves both the date values as well as
+                        # the backtesting values.
+                        figure={'data': [{'x': dh.monthly_kpi_sum(activityType="all",
+                                                                  year=dh.currentYear,
+                                                                  kpi="Moving Time")[0],
+                                          'y': dh.monthly_kpi_sum(activityType="all",
+                                                                  year=dh.currentYear,
+                                                                  kpi="Moving Time")[1],
+                                          'type': 'bar', 'title': f"Monthly Moving Time in {dh.currentYear}",
+                                          'mode': 'line',
+                                          'marker': {'color': Styles.colorPalette[2]},
+                                          'line': {'width': 8}}],
+                                'layout': {'title': f"Monthly Moving Time in {dh.currentYear}",
+                                           'xaxis': {'title': 'Time in Months', 'tickangle': 0},
+                                           'yaxis': {'title': 'Moving time in Hours'}}}
+                    ),
+                ], style=Styles.STYLE(49)),
+                html.Div([''], style=Styles.FILLER()),
+                html.Div([
+                    # Dash Core Components Graph element.
+                    dcc.Graph(
+                        id='Monthy Elevation',
+                        # Trigger the function in the Data_Handler module that retrieves both the date values as well as
+                        # the backtesting values.
+                        figure={'data': [{'x': dh.monthly_kpi_sum(activityType="all",
+                                                                  year=dh.currentYear,
+                                                                  kpi="Elevation Gain")[0],
+                                          'y': dh.monthly_kpi_sum(activityType="all",
+                                                                  year=dh.currentYear,
+                                                                  kpi="Elevation Gain")[1],
+                                          'type': 'bar', 'title': f"Monthly Elevation in {dh.currentYear}",
+                                          'mode': 'line',
+                                          'marker': {'color': Styles.colorPalette[3]},
+                                          'line': {'width': 8}}],
+                                'layout': {'title': f"Monthly Elevation in {dh.currentYear}",
+                                           'xaxis': {'title': 'Time in Months', 'tickangle': 0},
+                                           'yaxis': {'title': 'Elevation Gain in m'}}}
+                    ),
+                ], style=Styles.STYLE(49)),
+            ])])
+    elif tab == 'tab-2':
+        return html.Div([
+            html.H3('Please select the type of activity you want to analyze:'),
+            html.Div([
+                dcc.Dropdown(id='Sports Select', options=[{'label': i, 'value': i}
+                                                          for i in dh.uniqueActivityTypes(dh.currentYear)],
+                             value='Ride'),
+                html.Div(id='dd-output-container'),
+            ], style={'width': '100%', 'padding': Styles.graph_padding}),
+        ])
 
 
 @app.callback(Output('output-data-upload', 'children'),

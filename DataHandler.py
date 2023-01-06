@@ -3,7 +3,7 @@ from datetime import datetime  # for getting the current year
 
 import Styles
 
-currentYear = int(datetime.today().strftime('%Y'))
+currentYear = int(datetime.today().strftime('%Y')) - 1
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
