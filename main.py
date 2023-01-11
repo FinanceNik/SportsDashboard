@@ -20,9 +20,9 @@ app = dash.Dash(__name__, suppress_callback_exceptions=True,
 
 sidebar = html.Div(
     [
-        html.H1(f"Your {dh.currentYear}\n in Review", style={'fontSize': '46px', 'fontWeight': 'bold'}),
+        html.H1(f"Your {dh.currentYear}\n in Review", style={'fontSize': '36px', 'fontWeight': 'bold'}),
         html.Hr(style={'borderColor': Styles.greys[3]}),
-        html.H2("Section", className="lead", style={'fontSize': '30px'}),
+        html.H2("Section", className="lead", style={'fontSize': '28px'}),
         html.Hr(style={'borderColor': Styles.greys[3]}),
         dbc.Nav(
             [
