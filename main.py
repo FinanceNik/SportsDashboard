@@ -6,6 +6,7 @@ import io
 import dash
 from dash.dependencies import Input, Output, State
 from dash import dcc, html, dash_table
+import page_sportsType
 import pandas as pd
 import warnings
 import page_about
@@ -42,14 +43,14 @@ content = html.Div(id="page-content", style=Styles.CONTENT_STYLE)
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content],
                       style={'backgroundColor': 'white'})
 
-allActivities_Totals = aat = dh.Totals("all", 2022)
+allActivities_Totals = aat = dh.Totals("all", dh.currentYear-1)
 
 
 @app.callback(
     dash.dependencies.Output('dd-output-container', 'children'),
-    [dash.dependencies.Input('Sports Select', 'value')])
+    [dash.dependencies.Input('SportsSelect', 'value')])
 def update_outputt(value):
-    print(value)
+    return page_sportsType.render_page_content(value)
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
@@ -244,8 +245,8 @@ def render_content(tab):
         return html.Div([
             html.H3('Please select the type of activity you want to analyze:'),
             html.Div([
-                dcc.Dropdown(id='Sports Select', options=[{'label': i, 'value': i}
-                                                          for i in dh.uniqueActivityTypes(dh.currentYear)],
+                dcc.Dropdown(id='SportsSelect', options=[{'label': i, 'value': i}
+                                                         for i in dh.uniqueActivityTypes(dh.currentYear)],
                              value='Ride'),
                 html.Div(id='dd-output-container'),
             ], style={'width': '100%', 'padding': Styles.graph_padding}),

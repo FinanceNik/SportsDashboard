@@ -137,4 +137,5 @@ def monthly_kpi_sum(activityType, year, kpi):
 
 
 allActivities = Totals("all", currentYear)
+
 # print(allActivities.get_totalActivityTime())  # THIS IS HOW U CALL THE REFERRED TO OBJECT
