@@ -27,19 +27,18 @@ sudo apt-get install pip3
 ```
 
 ### Strava Data Export 
-*To be able to use the dashboard, you need to export your data from Strava. This can be a bit of a cumbersome task and hence, this guide shall guide you through the process. 
+To be able to use the dashboard, you need to export your data from Strava. 
+This can be a bit of a cumbersome task and hence, this guide shall guide you through the process. 
 
-1.
-2.
-3. 
-4.
-5.
-6.
-7.
-8.
-9.
-10.
-11.
-12.
+1. log into your Strava account: https://www.strava.com/login
+2. Once logged in, go to your account settings: https://www.strava.com/settings/profile
+3. Click on the second tab named "My Account"
+4. Scroll down to the bottom of the page to the section named "Download or Delete Your Account"
+5. Click on "Get Started"
+6. Scroll to the second option of the page and click on "Request Your Archive"
+7. You will receive an email with a link to download your data. Click on the link and download the zip file.
+8. Unzip the file and go into the folder to get the "activities.csv" file.
+9. Move the "activities.csv" file into the "assets" folder of this project.
+10. You are ready to go!
 
 ---

@@ -11,7 +11,7 @@ colorPalette = {
     4: ['#0B132B', '#1C2541', '#3A506B', '#5BC0BE'],  # not so nice
     5: ['#993955', '#AE76A6', '#A3C3D9', '#CCD6EB'],  # not nice at all
     6: ['#5E5C6C', '#0B5563', '#A2BCE0', '#5299D3'],  # okay, but not great
-    7: ['#0D1F2D', '#546A7B', '#9EA3B0', '#FAE1DF'],  # nahh
+    7: ['#0D1F2D', '#546A7B', '#9EA3B0', '#FAE1DF'],  # nah
     8: ['#373F51', '#008DD5', '#F56476', '#E43F6F'],  # red and blueish and kinda nice
     9: ['#2A4747', '#439775', '#48BF84', '#E0BAD7'],  # greenish and very nice
     }
