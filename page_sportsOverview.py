@@ -12,6 +12,18 @@ def render_page_content():
                           'padding': Styles.graph_padding}),
                 html.Hr(),
                 html.Div([
+                    html.H4(f"{dh.currentYear-1}"),
+                    dcc.Graph(
+                        id='Activity Type Distribution',
+                        figure={'data': [
+                            {'values': dh.mostUsedActivityType(dh.currentYear-1)[2],
+                             'labels': dh.mostUsedActivityType(dh.currentYear-1)[0],
+                             'marker': {'colors': dh.mostUsedActivityType(dh.currentYear-1)[5]},
+                             'type': 'pie', 'layout': {'margin': dict(t=0, b=100, l=0, r=0)}}]}),
+                ], style=Styles.STYLE(49)),
+                html.Div([''], style=Styles.FILLER()),
+                html.Div([
+                    html.H4(f"{dh.currentYear}"),
                     dcc.Graph(
                         id='Activity Type Distribution',
                         figure={'data': [
@@ -19,14 +31,23 @@ def render_page_content():
                              'labels': dh.mostUsedActivityType(dh.currentYear)[0],
                              'marker': {'colors': dh.mostUsedActivityType(dh.currentYear)[5]},
                              'type': 'pie', 'layout': {'margin': dict(t=0, b=100, l=0, r=0)}}]}),
-                ], style=Styles.STYLE(100)),
+                ], style=Styles.STYLE(49)),
                 html.Div([
-                    Styles.kpiboxes('Total Activities:', dh.allActivities.get_nrOfActivities(), Styles.colorPalette[0]),
-                    Styles.kpiboxes('Total Time (in hrs):', dh.allActivities.get_totalActivityTime(),
+                    Styles.kpiboxes(f'Total Activities ({dh.currentYear-1} / {dh.currentYear}):',
+                                    f'{dh.Totals("all", dh.currentYear-1).get_nrOfActivities()} '
+                                    f'/ {dh.Totals("all", dh.currentYear).get_nrOfActivities()}',
+                                    Styles.colorPalette[0]),
+                    Styles.kpiboxes(f'Total Time (in hrs) ({dh.currentYear-1} / {dh.currentYear}):',
+                                    f'{dh.Totals("all", dh.currentYear-1).get_totalActivityTime()} '
+                                    f'/ {dh.Totals("all", dh.currentYear).get_totalActivityTime()}',
                                     Styles.colorPalette[1]),
-                    Styles.kpiboxes('Total Distance:', dh.allActivities.get_totalActivityDistance(),
+                    Styles.kpiboxes(f'Total Distance ({dh.currentYear-1} / {dh.currentYear}):',
+                                   f'{dh.Totals("all", dh.currentYear-1).get_totalActivityDistance()} '
+                                   f'/ {dh.Totals("all", dh.currentYear).get_totalActivityDistance()}',
                                     Styles.colorPalette[2]),
-                    Styles.kpiboxes('Total Elevation:', dh.allActivities.get_totalElevationGain(),
+                    Styles.kpiboxes(f'Total Elevation ({dh.currentYear-1} / {dh.currentYear}):',
+                                    f'{dh.Totals("all", dh.currentYear-1).get_totalElevationGain()} '
+                                    f'/ {dh.Totals("all", dh.currentYear).get_totalElevationGain()}',
                                     Styles.colorPalette[3]),
                 ]),
                 html.Hr(),

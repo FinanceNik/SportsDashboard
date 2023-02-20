@@ -1,13 +1,12 @@
-import pandas as pd
+import pandas as pd  # for data handling
 from datetime import datetime  # for getting the current year
+import Styles  # for styling and coloring
 
-import Styles
-
-currentYear = int(datetime.today().strftime('%Y')) - 1
+currentYear = int(datetime.today().strftime('%Y'))  # the current year
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
-    df = pd.read_csv('activities.csv')
+    df = pd.read_csv('assets/activities.csv')
     df['Activity Date'] = pd.to_datetime(df['Activity Date'])
     df.insert(1, "year", "")
     df['year'] = df['Activity Date'].dt.year
@@ -134,8 +133,5 @@ def monthly_kpi_sum(activityType, year, kpi):
             volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum())
             volumes.append(volume)
         return months, volumes
-
-
-allActivities = Totals("all", currentYear)
 
 # print(allActivities.get_totalActivityTime())  # THIS IS HOW U CALL THE REFERRED TO OBJECT
