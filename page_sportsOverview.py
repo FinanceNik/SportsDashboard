@@ -21,7 +21,7 @@ def render_page_content():
                              'marker': {'colors': dh.mostUsedActivityType(dh.currentYear-1)[5]},
                              'type': 'pie', 'layout': {'margin': dict(t=0, b=100, l=0, r=0)}}]}),
                 ], style=Styles.STYLE(49)),
-                html.Div([''], style=Styles.FILLER()),
+                html.Div([''], style=Styles.FILLER()),git
                 html.Div([
                     html.H4(f"{dh.currentYear}"),
                     dcc.Graph(
