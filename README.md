@@ -1,9 +1,18 @@
 # SportsDashboard
-This dashboard serves as a non-commercial, open-source alternative to a well-known sports application.
+This dashboard serves as a non-commercial, open-source alternative to a well-known sports application. 
+With this dashboard, you can visualize your sports data and do some basic analysis. Furthermore, you can use 
+the presented information in order to track your sports progress and set new goals.
+
+---
+## Version: 0.1.0
+### Author: Finance Nik 
+#### Date: 20.02.2023
 
 ---
 
 ## Prerequisites 
+This section briefly describes the prerequisites for this project. You need to have Python3, PIP, necessary libraries
+and the Strava data export in order to run the dashboard.
 
 ### Python 3 
 You need to have Python 3 installed, preferrably a version >3.6 due to compatability.
