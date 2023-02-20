@@ -3,7 +3,7 @@ import Styles
 import main
 
 
-def render_content():
+def render_page_content():
     return html.Div(children=[
         html.Div([html.H1('About the Creators...')], style={"textAlign": "center"}),
         html.Hr(),
