@@ -6,7 +6,7 @@ currentYear = int(datetime.today().strftime('%Y'))  # the current year
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
-    df = pd.read_csv('assets/activities.csv')
+    df = pd.read_csv('assets/activities_lari.csv')
     df['Activity Date'] = pd.to_datetime(df['Activity Date'])
     df.insert(1, "year", "")
     df['year'] = df['Activity Date'].dt.year
@@ -27,6 +27,7 @@ def uniqueActivityTypes(year):
 
 
 def mostUsedActivityType(year):
+    # TODO match the colors to one type of activity regardless of the year --> ColorX == "Hike"
     df = dataCleaner("all", year)
     activityTypes = uniqueActivityTypes(year)
     counts = []
@@ -71,6 +72,7 @@ class Totals:
         return self.totalActiveDays
 
     def get_totalElevationGain(self) -> float:
+        # TODO remove the elevation of activity_type == "alpine ski"
         return round(self.totalElevationGain, 2)
 
     def get_totalActivityTime(self) -> int:
