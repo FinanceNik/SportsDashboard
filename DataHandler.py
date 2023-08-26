@@ -6,7 +6,7 @@ currentYear = int(datetime.today().strftime('%Y'))  # the current year
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
-    df = pd.read_csv('assets/activities_lari.csv')
+    df = pd.read_csv('assets/activities.csv')
     df['Activity Date'] = pd.to_datetime(df['Activity Date'])
     df.insert(1, "year", "")
     df['year'] = df['Activity Date'].dt.year
