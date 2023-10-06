@@ -8,6 +8,8 @@ import page_sportsType
 import page_sportsOverview
 import page_about
 
+basePath = '/sports-activities'
+
 app = dash.Dash(__name__, suppress_callback_exceptions=True,
                 external_stylesheets=[dbc.themes.BOOTSTRAP],
                 url_base_pathname='/')
@@ -20,8 +22,8 @@ sidebar = html.Div(
         html.Hr(style={'borderColor': Styles.greys[3]}),
         dbc.Nav(
             [
-                dbc.NavLink("Your Review", href="/", active="exact"),
-                dbc.NavLink("About This App", href="/about", active="exact"),
+                dbc.NavLink("Your Review", href=f"{basePath}/", active="exact"),
+                dbc.NavLink("About This App", href=f"{basePath}/about", active="exact"),
             ],
             vertical=True,
             pills=True,
@@ -48,7 +50,7 @@ def update_outputt(value):
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
-    if pathname == "/":
+    if pathname == f"{basePath}/":
         return html.Div(children=[
             dcc.Tabs(id='tabs-example', value='tab-1', children=[
                 dcc.Tab(label='All Sports ', value='tab-1'),
@@ -57,7 +59,7 @@ def render_page_content(pathname):
             html.Hr(),
             html.Div(id='tabs-example-content')])
 
-    elif pathname == "/about":
+    elif pathname == f"{basePath}/about":
         return page_about.render_page_content()
 
 
