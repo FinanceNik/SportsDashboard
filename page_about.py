@@ -46,50 +46,13 @@ def render_page_content():
         ], style={'textAlign': 'center', 'width': '17.3%', 'display': 'inline-block'}),
         html.Hr(),
         html.Div([html.H1('About the Tool...')], style={"textAlign": "center"}),
-        # Text body of what this tool was designed for and some background information.
-        html.Div([
-            html.P([
-                'This tool has been created as the final project for a masters level university course in Banking and',
-                html.Br(),
-                'Finance at the Lucerne School of Business. The subject is called Module 11 and focuses on a',
-                html.Br(),
-                'research project with practical application. The tool is meant as a way for asset managers,',
-                html.Br(),
-                'banks, and brokers to automate the process of creating a client`s portfolio.',
-                html.Br(),
-                html.Br(),
-                'Firstly, during an interview, the bank teller fills out a questionnaire with the respective client.',
-                html.Br(),
-                'This questionnaire establishes the client`s relationship towards risk tolerance and his or hers',
-                html.Br(),
-                'ability to take on risk and to absorb possible downfalls in the financial markets.',
-                html.Br(),
-                html.Br(),
-                'Secondly, the client can select the asset classes in which it is desired to be invested in',
-                html.Br(),
-                'and furthermore give the respective asset classes a minimum weight in the portfolio',
-                html.Br(),
-                'if so is desired.',
-                html.Br(),
-                html.Br(),
-                'Lastly, the inputs can be checked before submitting the data to the portfolio creation algorithm.',
-                html.Br(),
-                'The algorithm back-tests the performance of the selected assets and constraints when combined',
-                html.Br(),
-                'to a portfolio. The tool is calibrated to use the latest, scientifically established',
-                html.Br(),
-                'portfolio theory, namely Markowitz`s Modern Portfolio Theory and the accommodating',
-                html.Br(),
-                'Efficient Frontier. Moreover, the portfolio is selected based on a risk score',
-                html.Br(),
-                'that is established via the questionnaire`s input selections. The ',
-                html.Br(),
-                'selections splits the back-tested portfolios by volatility',
-                html.Br(),
-                'and chooses the portfolio with the highest Sharpe ratio',
-                html.Br(),
-                'that fits within a volatility bracket.',
-            ]),
-            html.Hr()
-        ], style={'textAlign': 'center', 'width': '100%', 'display': 'inline-block'}),
+        # Create a text about this project
+
+
+
+
+
     ])
+
+# create a text
+

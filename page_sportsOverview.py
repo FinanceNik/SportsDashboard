@@ -37,7 +37,7 @@ def render_page_content():
                                     f'{dh.Totals("all", dh.currentYear-1).get_nrOfActivities()} '
                                     f'/ {dh.Totals("all", dh.currentYear).get_nrOfActivities()}',
                                     Styles.colorPalette[0]),
-                    Styles.kpiboxes(f'Total Time (in hrs) ({dh.currentYear-1} / {dh.currentYear}):',
+                    Styles.kpiboxes(f'Total Time (in h.) ({dh.currentYear-1} / {dh.currentYear}):',
                                     f'{dh.Totals("all", dh.currentYear-1).get_totalActivityTime()} '
                                     f'/ {dh.Totals("all", dh.currentYear).get_totalActivityTime()}',
                                     Styles.colorPalette[1]),

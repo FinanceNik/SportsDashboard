@@ -3,17 +3,24 @@ import DataHandler as dh
 from dash import dcc, html
 
 
+
+
+
 def render_page_content(value):
     data = dh.Totals(value, dh.currentYear)
+    thousandSeparator = lambda x: "{:,}".format(x)
+    tAD = thousandSeparator(int(data.get_totalActivityDistance()))
+    tEG = thousandSeparator(int(data.get_totalElevationGain()))
     return html.Div([
         html.Hr(),
         html.Div([
+            # format an integer with thousands separator
             Styles.kpiboxes(f'Total {value} Activities:', data.get_nrOfActivities(), Styles.colorPalette[0]),
             Styles.kpiboxes(f'Total {value} Time (in hrs):', data.get_totalActivityTime(),
                             Styles.colorPalette[1]),
-            Styles.kpiboxes(f'Total {value} Distance:', data.get_totalActivityDistance(),
+            Styles.kpiboxes(f'Total {value} Distance (in km):', tAD,
                             Styles.colorPalette[2]),
-            Styles.kpiboxes(f'Total {value} Elevation:', data.get_totalElevationGain(),
+            Styles.kpiboxes(f'Total {value} Elevation (in m):', tEG,
                             Styles.colorPalette[3]),
         ]),
         html.Hr(),
