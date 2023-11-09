@@ -50,6 +50,5 @@ This can be a bit of a cumbersome task and hence, this guide shall guide you thr
 7. You will receive an email with a link to download your data. Click on the link and download the zip file.
 8. Unzip the file and go into the folder to get the "activities.csv" file.
 9. Move the "activities.csv" file into the "assets" folder of this project.
-10. You are ready to go!
-
+10. Last but not least, go to the "import data" section of the app and upload the 'activities.csv'.
 ---
