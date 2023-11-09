@@ -7,18 +7,32 @@ months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
-    df = pd.read_csv('assets/activities.csv')
-    df['Activity Date'] = pd.to_datetime(df['Activity Date'])
-    df.insert(1, "year", "")
-    df['year'] = df['Activity Date'].dt.year
-    df.insert(1, "month", "")
-    df['month'] = df['Activity Date'].dt.month
+    try:
+        df = pd.read_csv('assets/activities.csv')
+        df['Activity Date'] = pd.to_datetime(df['Activity Date'])
+        df.insert(1, "year", "")
+        df['year'] = df['Activity Date'].dt.year
+        df.insert(1, "month", "")
+        df['month'] = df['Activity Date'].dt.month
 
-    if activityType == "all":
-        return df.loc[df['year'] == year]
-    else:
-        df = df.loc[df['Activity Type'] == activityType]
-        return df.loc[df['year'] == year]
+        if activityType == "all":
+            return df.loc[df['year'] == year]
+        else:
+            df = df.loc[df['Activity Type'] == activityType]
+            return df.loc[df['year'] == year]
+    except:
+        df = pd.read_csv('assets/activities_test.csv')
+        df['Activity Date'] = pd.to_datetime(df['Activity Date'])
+        df.insert(1, "year", "")
+        df['year'] = df['Activity Date'].dt.year
+        df.insert(1, "month", "")
+        df['month'] = df['Activity Date'].dt.month
+
+        if activityType == "all":
+            return df.loc[df['year'] == year]
+        else:
+            df = df.loc[df['Activity Type'] == activityType]
+            return df.loc[df['year'] == year]
 
 
 def uniqueActivityTypes(year):
@@ -53,8 +67,6 @@ def mostUsedActivityType(year):
                          })
     colorList = Styles.purple_list[:len(keys)]
     return keys, values, percentages, totals, dash_table_df, colorList
-
-# mostUsedActivityType(2022)
 
 
 class Totals:
