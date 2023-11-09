@@ -3,6 +3,7 @@ from datetime import datetime  # for getting the current year
 import Styles  # for styling and coloring
 
 currentYear = int(datetime.today().strftime('%Y'))  # the current year
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
@@ -113,7 +114,6 @@ class Max:
 
 def monthly_kpi_count(activityType, year, kpi):
     df = dataCleaner(activityType, year)
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     volumes = []
     for month in range(1, 13):
         volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].count())
@@ -123,7 +123,6 @@ def monthly_kpi_count(activityType, year, kpi):
 
 def monthly_kpi_sum(activityType, year, kpi):
     df = dataCleaner(activityType, year)
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     volumes = []
     if kpi == "Moving Time":
         for month in range(1, 13):
@@ -135,5 +134,9 @@ def monthly_kpi_sum(activityType, year, kpi):
             volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum())
             volumes.append(volume)
         return months, volumes
+
+
+def thousands(x):
+    return "{:,}".format(int(x))
 
 # print(allActivities.get_totalActivityTime())  # THIS IS HOW U CALL THE REFERRED TO OBJECT

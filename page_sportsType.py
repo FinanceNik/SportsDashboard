@@ -14,7 +14,6 @@ def render_page_content(value):
     return html.Div([
         html.Hr(),
         html.Div([
-            # format an integer with thousands separator
             Styles.kpiboxes(f'Total {value} Activities:', data.get_nrOfActivities(), Styles.colorPalette[0]),
             Styles.kpiboxes(f'Total {value} Time (in hrs):', data.get_totalActivityTime(),
                             Styles.colorPalette[1]),
@@ -25,11 +24,8 @@ def render_page_content(value):
         ]),
         html.Hr(),
         html.Div([
-            # Dash Core Components Graph element.
             dcc.Graph(
                 id='Monthly Activities',
-                # Trigger the function in the Data_Handler module that retrieves both the date values as well as
-                # the backtesting values.
                 figure={'data': [{'x': dh.monthly_kpi_count(activityType=value,
                                                             year=dh.currentYear,
                                                             kpi="Activity Type")[0],
@@ -47,11 +43,8 @@ def render_page_content(value):
         ], style=Styles.STYLE(49)),
         html.Div([''], style=Styles.FILLER()),
         html.Div([
-            # Dash Core Components Graph element.
             dcc.Graph(
                 id='Monthy Distance',
-                # Trigger the function in the Data_Handler module that retrieves both the date values as well as
-                # the backtesting values.
                 figure={'data': [{'x': dh.monthly_kpi_sum(activityType=value,
                                                           year=dh.currentYear,
                                                           kpi="Distance")[0],
@@ -69,11 +62,8 @@ def render_page_content(value):
         ], style=Styles.STYLE(49)),
         html.Hr(),
         html.Div([
-            # Dash Core Components Graph element.
             dcc.Graph(
                 id='Monthy Moving Time',
-                # Trigger the function in the Data_Handler module that retrieves both the date values as well as
-                # the backtesting values.
                 figure={'data': [{'x': dh.monthly_kpi_sum(activityType=value,
                                                           year=dh.currentYear,
                                                           kpi="Moving Time")[0],

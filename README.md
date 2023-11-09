@@ -1,3 +1,5 @@
+![Alt Text](assets/sports_dashboard_screenshot.png)
+
 # SportsDashboard
 This dashboard serves as a non-commercial, open-source alternative to a well-known sports application. 
 With this dashboard, you can visualize your sports data and do some basic analysis. Furthermore, you can use 
@@ -11,7 +13,7 @@ the presented information in order to track your sports progress and set new goa
 ---
 
 ## Prerequisites 
-This section briefly describes the prerequisites for this project. You need to have Python3, PIP, necessary libraries
+This section briefly describes the prerequisites for this project. You need to have Pythogn3, PIP, necessary libraries
 and the Strava data export in order to run the dashboard.
 
 ### Python 3 
@@ -35,7 +37,7 @@ If PIP is not installed, you can do so in the terminal:
 sudo apt-get install pip3
 ```
 
-### Strava Data Export 
+## Strava Data Export 
 To be able to use the dashboard, you need to export your data from Strava. 
 This can be a bit of a cumbersome task and hence, this guide shall guide you through the process. 
 

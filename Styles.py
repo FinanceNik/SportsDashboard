@@ -5,21 +5,13 @@ greys = ['#2b2b2b', '#3b3b3b', '#cfcfcf', '#f0f0f0']
 
 colorPalette = {
     0: ['#495C83', '#7A86B6', '#A8A4CE', '#C8B6E2'],  # purple and very nice
-    1: ['#06283D', '#1363DF', '#47B5FF', '#DFF6FF'],  # not so nice
-    2: ['#354259', '#CDC2AE', '#ECE5C7', '#C2DED1'],  # not so nice
-    3: ['#363062', '#4D4C7D', '#827397', '#E9D5CA'],  # other kind of purple, last colour could be better
-    4: ['#0B132B', '#1C2541', '#3A506B', '#5BC0BE'],  # not so nice
-    5: ['#993955', '#AE76A6', '#A3C3D9', '#CCD6EB'],  # not nice at all
-    6: ['#5E5C6C', '#0B5563', '#A2BCE0', '#5299D3'],  # okay, but not great
-    7: ['#0D1F2D', '#546A7B', '#9EA3B0', '#FAE1DF'],  # nah
-    8: ['#373F51', '#008DD5', '#F56476', '#E43F6F'],  # red and blueish and kinda nice
-    9: ['#2A4747', '#439775', '#48BF84', '#E0BAD7'],  # greenish and very nice
+    1: ['#373F51', '#008DD5', '#F56476', '#E43F6F'],  # red and blueish and kinda nice
+    2: ['#2A4747', '#439775', '#48BF84', '#E0BAD7'],  # greenish and very nice
     }
 
-purple_list = ['#495C83', '#7A86B6', '#A8A4CE', '#C8B6E2', '#363062', '#4D4C7D',
-               '#827397', '#E9D5CA', '#495C83', '#7A86B6', '#A8A4CE', '#C8B6E2']
+purple_list = colorPalette[1] + colorPalette[0]
 
-colorPalette = colorPalette[0]
+colorPalette = colorPalette[1]
 
 strongGreen = '#37D151'
 strongRed = '#FF5B5B'
