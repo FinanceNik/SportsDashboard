@@ -10,10 +10,12 @@ def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hik
     try:
         df = pd.read_csv('assets/activities.csv')
         df['Activity Date'] = pd.to_datetime(df['Activity Date'])
+        df["Distance"] = pd.to_numeric(df['Distance'], errors='coerce')
         df.insert(1, "year", "")
         df['year'] = df['Activity Date'].dt.year
         df.insert(1, "month", "")
         df['month'] = df['Activity Date'].dt.month
+        df = df[["Activity Date", "month", "year", "Activity Type", "Distance", "Moving Time", "Elevation Gain"]]
 
         if activityType == "all":
             return df.loc[df['year'] == year]
@@ -27,6 +29,7 @@ def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hik
         df['year'] = df['Activity Date'].dt.year
         df.insert(1, "month", "")
         df['month'] = df['Activity Date'].dt.month
+        df = df[["Activity Date", "month", "year", "Activity Type", "Distance", "Moving Time", "Elevation Gain"]]
 
         if activityType == "all":
             return df.loc[df['year'] == year]
@@ -56,7 +59,7 @@ def mostUsedActivityType(year):
     totals = sum(values)
     percentages = []
     for i in values:
-        percent = round(i / totals, 3)
+        percent = round(int(i) / int(totals), 3)
         percentages.append(percent)
 
     percentages_for_table = [f"{round(i*100, 2)}%" for i in percentages]
@@ -86,13 +89,13 @@ class Totals:
 
     def get_totalElevationGain(self) -> float:
         # TODO remove the elevation of activity_type == "alpine ski"
-        return round(self.totalElevationGain, 2)
+        return int(self.totalElevationGain)
 
     def get_totalActivityTime(self) -> int:
         return int(self.totalActivityTime / 3600)
 
     def get_totalActivityDistance(self) -> float:
-        return round(self.totalActivityDistance, 2)
+        return int(self.totalActivityDistance)
 
 
 class Max:
@@ -138,7 +141,7 @@ def monthly_kpi_sum(activityType, year, kpi):
     volumes = []
     if kpi == "Moving Time":
         for month in range(1, 13):
-            volume = round(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum() / 3600, 2)
+            volume = int(df.loc[(df['year'] == year) & (df['month'] == month), kpi].sum() / 3600)
             volumes.append(volume)
         return months, volumes
     else:
@@ -152,3 +155,18 @@ def thousands(x):
     return "{:,}".format(int(x))
 
 # print(allActivities.get_totalActivityTime())  # THIS IS HOW U CALL THE REFERRED TO OBJECT
+
+# Get months and counts for previous and current year
+def higher_or_lower(activityType, kpi, aggType):
+    if aggType == "count":
+        prev_x, prev_y = monthly_kpi_count(activityType=activityType, year=currentYear - 1, kpi=kpi)
+        curr_x, curr_y = monthly_kpi_count(activityType=activityType, year=currentYear, kpi=kpi)
+    else:
+        prev_x, prev_y = monthly_kpi_sum(activityType=activityType, year=currentYear - 1, kpi=kpi)
+        curr_x, curr_y = monthly_kpi_sum(activityType=activityType, year=currentYear, kpi=kpi)
+
+    curr_colors = [
+        Styles.high_color if curr_val >= prev_val else Styles.low_color
+        for curr_val, prev_val in zip(curr_y, prev_y)
+    ]
+    return curr_colors

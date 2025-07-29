@@ -3,6 +3,8 @@ from dash import dash_table
 
 greys = ['#2b2b2b', '#3b3b3b', '#cfcfcf', '#f0f0f0']
 
+high_color, low_color = "green", "red"
+
 colorPalette = {
     0: ['#495C83', '#7A86B6', '#A8A4CE', '#C8B6E2'],  # purple and very nice
     1: ['#373F51', '#008DD5', '#F56476', '#E43F6F'],  # red and blueish and kinda nice
