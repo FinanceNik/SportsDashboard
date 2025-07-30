@@ -81,6 +81,7 @@ def render_page_content():
                         ],
                         'layout': {
                             'title': {'text':f'Number of Activities per Month in {dh.currentYear - 1} vs {dh.currentYear}'},
+                            "showlegend":False,
                             'xaxis': {'title': {"text":'Months'}},
                             'yaxis': {'title': {"text":'Number of Activities'}}
                         }
@@ -112,6 +113,7 @@ def render_page_content():
                                      ],
                             'layout': {
                                 'title': {'text':f'Distance per Month in {dh.currentYear - 1} vs {dh.currentYear}'},
+                                "showlegend":False,
                                 'xaxis': {'title': {"text":'Months'}},
                                 'yaxis': {'title': {"text":'Distance in km'}}}}
                 ),
@@ -141,6 +143,7 @@ def render_page_content():
                                      ],
                             'layout': {
                                 'title': {'text':f'Moving Time per Month in {dh.currentYear - 1} vs {dh.currentYear}'},
+                                "showlegend":False,
                                 'xaxis': {'title': {"text":'Months'}},
                                 'yaxis': {'title': {"text":'Moving Time in h'}}}}
                 ),
@@ -172,6 +175,7 @@ def render_page_content():
                             'layout': {
                                 'title': {'text':f'Elevation Gain per Month in {dh.currentYear - 1} vs {dh.currentYear}'},
                                 'xaxis': {'title': {"text":'Months'}},
+                                "showlegend": False,
                                 'yaxis': {'title': {"text":'Elevation Gain in M'}}}}
                 ),
             ], style=Styles.STYLE(49)),

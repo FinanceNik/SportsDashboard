@@ -54,6 +54,7 @@ def render_page_content(value):
                          'marker': {'color': dh.higher_or_lower(value,"Activity Type" , "count")},
                          'line': {'width': 8}}],
                         'layout': {'title': {"text": f"Number of Activities per Month"},
+                                   "showlegend": False,
                                    'xaxis': {'title': {"text":'Months', 'tickangle': 0}},
                                    'yaxis': {'title': {"text":'Number of Activies'}}
                                    }
@@ -86,6 +87,7 @@ def render_page_content(value):
                                  'marker': {'color': dh.higher_or_lower(value,"Distance" , "sum")},
                                  'line': {'width': 8}}],
                         'layout': {'title': {"text": "Monthly Distance"},
+                                   "showlegend": False,
                                    'xaxis': {'title': {"text": 'Months'}, 'tickangle': 0},
                                    'yaxis': {'title': {"text": 'Distance in KM'}}}}
             ),
@@ -115,6 +117,7 @@ def render_page_content(value):
                                   'marker': {'color': dh.higher_or_lower(value,"Moving Time" , "sum")},
                                   'line': {'width': 8}}],
                         'layout': {'title': {"text": "Monthly Moving Time"},
+                                   "showlegend": False,
                                    'xaxis': {'title': {"text":'Months'}, 'tickangle': 0},
                                    'yaxis': {'title': {"text":'Moving time in Hours'}}}}
             ),
@@ -144,6 +147,7 @@ def render_page_content(value):
                                   'marker': {'color': dh.higher_or_lower(value,"Elevation Gain" , "sum")},
                                   'line': {'width': 8}}],
                         'layout': {'title': {"text": "Monthly Elevation"},
+                                   "showlegend":False,
                                    'xaxis': {'title': {"text": 'Months'}, 'tickangle': 0},
                                    'yaxis': {'title': {"text": 'Elevation Gain in m'}}}}
             ),
