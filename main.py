@@ -106,6 +106,7 @@ def render_page_content(pathname):
             dcc.Tabs(id='tabs-example', value='tab-1', children=[
                 dcc.Tab(label='All Sports ', value='tab-1'),
                 dcc.Tab(label='Select Sports Type', value='tab-2'),
+                dcc.Tab(label='Detailed Analysis', value='tab-3'),
             ], style=Styles.TAB_STYLE),
             html.Hr(),
             html.Div(id='tabs-example-content')])
@@ -155,6 +156,14 @@ def render_content(tab):
                              value='Ride'),
                 html.Div(id='dd-output-container'),
             ], style={'width': '100%', 'padding': Styles.graph_padding}),
+        ])
+    elif tab == 'tab-3':
+        return html.Div([
+            html.H3('Are you only working out during good weather?'),
+            html.H5('Your bad weather ratio:'),
+            html.Hr(),
+            html.H2(f"You are working out in the rain: {round(dh.activity_rain_sun_ratio(),2)} % of the time."),
+            html.Hr()
         ])
 
 

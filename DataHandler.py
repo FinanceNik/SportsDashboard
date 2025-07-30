@@ -1,41 +1,28 @@
 import pandas as pd  # for data handling
-from datetime import datetime  # for getting the current year
+from datetime import datetime, date  # for getting the current year
 import Styles  # for styling and coloring
+import requests  # for getting weather data
 
 currentYear = int(datetime.today().strftime('%Y'))  # the current year
-months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 
 def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hike]
-    try:
-        df = pd.read_csv('assets/activities.csv')
-        df['Activity Date'] = pd.to_datetime(df['Activity Date'])
-        df["Distance"] = pd.to_numeric(df['Distance'], errors='coerce')
-        df.insert(1, "year", "")
-        df['year'] = df['Activity Date'].dt.year
-        df.insert(1, "month", "")
-        df['month'] = df['Activity Date'].dt.month
-        df = df[["Activity Date", "month", "year", "Activity Type", "Distance", "Moving Time", "Elevation Gain"]]
+    df = pd.read_csv('assets/activities.csv')
+    df['Activity Date'] = pd.to_datetime(df['Activity Date'])
+    df["Distance"] = pd.to_numeric(df['Distance'], errors='coerce')
+    df.insert(1, "year", "")
+    df['year'] = df['Activity Date'].dt.year
+    df.insert(1, "month", "")
+    df['month'] = df['Activity Date'].dt.month
 
-        if activityType == "all":
-            return df.loc[df['year'] == year]
-        else:
-            df = df.loc[df['Activity Type'] == activityType]
-            return df.loc[df['year'] == year]
-    except:
-        df = pd.read_csv('assets/activities_test.csv')
-        df['Activity Date'] = pd.to_datetime(df['Activity Date'])
-        df.insert(1, "year", "")
-        df['year'] = df['Activity Date'].dt.year
-        df.insert(1, "month", "")
-        df['month'] = df['Activity Date'].dt.month
-        df = df[["Activity Date", "month", "year", "Activity Type", "Distance", "Moving Time", "Elevation Gain"]]
+    if activityType == "all":
+        return df.loc[df['year'] == year]
+    else:
+        df = df.loc[df['Activity Type'] == activityType]
+        return df.loc[df['year'] == year]
 
-        if activityType == "all":
-            return df.loc[df['year'] == year]
-        else:
-            df = df.loc[df['Activity Type'] == activityType]
-            return df.loc[df['year'] == year]
+
 
 
 def uniqueActivityTypes(year):
@@ -170,3 +157,54 @@ def higher_or_lower(activityType, kpi, aggType):
         for curr_val, prev_val in zip(curr_y, prev_y)
     ]
     return curr_colors
+
+
+def dataCleanerWeather():  # --> string: Can be [Ride, Run, Walk, Hike]
+    df = pd.read_csv('assets/activities.csv')
+    df['Activity Date'] = pd.to_datetime(df['Activity Date'])
+    df.insert(1, "year", "")
+    df['year'] = df['Activity Date'].dt.year
+    df.insert(1, "rain", pd.NA)
+    df = df[["Activity Date", "rain"]]
+
+    # Luzern coordinates
+    latitude = 47.0502
+    longitude = 8.3093
+
+    start_date = df['Activity Date'].min().strftime('%Y-%m-%d')
+    end_date = df['Activity Date'].max().strftime('%Y-%m-%d')
+    url = (
+        f"https://archive-api.open-meteo.com/v1/archive"
+        f"?latitude={latitude}&longitude={longitude}"
+        f"&start_date={start_date}&end_date={end_date}"
+        f"&daily=precipitation_sum"
+        f"&timezone=Europe%2FBerlin"
+    )
+    response = requests.get(url)
+
+    data = response.json()
+    precipitation_by_date = dict(
+        zip(data['daily']['time'], data['daily']['precipitation_sum'])
+    )
+
+    df['rain'] = df['Activity Date'].dt.strftime('%Y-%m-%d').map(
+        lambda d: 1 if precipitation_by_date.get(d, 0) > 0 else 0
+    )
+    return df
+
+
+
+
+def activity_rain_sun_ratio():
+    df = dataCleanerWeather()
+    # Count days with activity on rainy and sunny days (group by date to get distinct days)
+    day_rain_status = df.groupby(df['Activity Date'].dt.date)['rain'].max()  # max to mark day rainy if any activity had rain=1
+
+    rainy_days = (day_rain_status == 1).sum()
+    sunny_days = (day_rain_status == 0).sum()
+
+    if sunny_days == 0:
+        return None
+
+    ratio = rainy_days / sunny_days
+    return ratio
