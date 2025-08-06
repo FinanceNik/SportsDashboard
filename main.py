@@ -11,6 +11,38 @@ import page_about
 import base64, io
 import pandas as pd
 import datetime
+import sqlite3
+
+
+#TODO:
+"""
+Change the handling of the light and dark mode. Instead of refreshing the element
+in an SQlite3 DB, use the dcc.Store function.
+"""
+
+
+
+
+
+# Connect to an SQLite database file (or create it)
+conn = sqlite3.connect('app_data.db', check_same_thread=False)  # Keep connection open during app lifetime
+
+# Create a cursor to run SQL commands
+cursor = conn.cursor()
+
+# Create the User_Theme table if it does not exist
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS User_Theme (
+        id INTEGER PRIMARY KEY,
+        theme TEXT NOT NULL
+    )
+''')
+
+# Optional: initialize the table with default if empty
+cursor.execute('SELECT COUNT(*) FROM User_Theme')
+if cursor.fetchone()[0] == 0:
+    cursor.execute("INSERT INTO User_Theme (theme) VALUES ('light')")
+    conn.commit()
 
 
 basePath = ''
@@ -22,7 +54,12 @@ sidebar = html.Div(
     [
         html.H1(f"Your {dh.currentYear}\n in Review", style={'fontSize': '36px', 'fontWeight': 'bold'}),
         html.Hr(style={'borderColor': Styles.greys[3]}),
-        html.H2("Section", className="lead", style={'fontSize': '28px'}),
+        # html.H2("Section", className="lead", style={'fontSize': '28px'}),
+        dbc.Switch(
+            id="theme-switch",
+            label="Dark mode",
+            value=False,
+        ),
         html.Hr(style={'borderColor': Styles.greys[3]}),
         dbc.Nav(
             [
@@ -35,12 +72,18 @@ sidebar = html.Div(
         ),
     ],
     style=Styles.SIDEBAR_STYLE,
+    id="sidebar"
 )
 
 content = html.Div(id="page-content", style=Styles.CONTENT_STYLE)
 
-app.layout = html.Div([dcc.Location(id="url"), sidebar, content],
-                      style={'backgroundColor': 'white'})
+app.layout = html.Div(
+    [dcc.Location(id="url", refresh=True),
+     dcc.Store(id="theme-store", storage_type='session'),
+     sidebar,
+     content
+     ], id="main-layout"
+)
 
 allActivities_Totals = aat = dh.Totals("all", dh.currentYear - 1)
 
@@ -92,6 +135,23 @@ def update_output(list_of_contents, list_of_names, list_of_dates):
             parse_contents(c, n, d) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
         return children
+
+@app.callback(
+    [Output("sidebar", "style"),
+     Output("page-content", "style"),
+    Input("theme-switch", "value")]
+)
+def toggle_dark_mode(is_dark_mode):
+    if is_dark_mode:
+        cursor.execute("UPDATE User_Theme SET theme = ? WHERE id = 1", ("dark",))
+        conn.commit()
+
+        return Styles.SIDEBAR_STYLE_DARK, Styles.CONTENT_STYLE_DARK
+    else:
+        cursor.execute("UPDATE User_Theme SET theme = ? WHERE id = 1", ("light",))
+        conn.commit()
+        return Styles.SIDEBAR_STYLE, Styles.CONTENT_STYLE
+
 
 @app.callback(
     dash.dependencies.Output('dd-output-container', 'children'),

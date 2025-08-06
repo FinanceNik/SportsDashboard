@@ -29,7 +29,6 @@ TAB_STYLE = {'boxShadow': boxshadow,
                       'borderColor': greys[2],
                       'fontSize': '20px',
                       'color': greys[2],
-                      "backgroundColor": greys[0],
                       'borderRadius': '15px'}
 
 SIDEBAR_STYLE = {
@@ -39,35 +38,50 @@ SIDEBAR_STYLE = {
     "bottom": 0,
     "width": "12em",
     "padding": "2rem 1rem",
-    "backgroundColor": greys[0],
-    'color': greys[2],
+    "backgroundColor": "#e8e8e8",
+    'color': "#121212",
     'fontSize': '23px',
     'boxShadow': '5px 5px 5px 5px lightgrey'}
 
-CONTENT_STYLE = {"marginLeft": "18rem", "marginRight": "2rem", "padding": "2rem 1rem"}
+SIDEBAR_STYLE_DARK = {
+    "position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
+    "width": "12em",
+    "padding": "2rem 1rem",
+    "backgroundColor": "#1f1f1f",
+    "color": "#f2f2f2",
+    "fontSize": "23px",
+    "boxShadow": "5px 5px 5px 5px #00000088"  # subtle dark shadow
+}
+
+CONTENT_STYLE = {
+    "marginLeft": "18rem",
+    "marginRight": "2rem",
+    "padding": "2rem 1rem",
+    "backgroundColor": "white",
+    "color": "black",
+}
+
+CONTENT_STYLE_DARK = {
+    "marginLeft": "18rem",
+    "marginRight": "2rem",
+    "padding": "2rem 1rem",
+    "backgroundColor": "#1f1f1f",
+    "color": "#f2f2f2"
+}
 
 
 def STYLE(width):
-    return{'width': f'{width}%', 'display': 'inline-block', 'align': 'center', 'padding': '10px',
-             'boxShadow': boxshadow,
-             'borderRadius': '10px',
-             'overflow': 'hidden'}
-
-
-def STYLE_PIE(width):
-    return{'width': f'{width}%', 'display': 'inline-block', 'align': 'center', 'padding': '10px',
-           'boxShadow': boxshadow,
-           'height': '30vh',
-           'borderRadius': '10px',
-           'overflow': 'hidden'}
-
-
-def STYLE_MINI():
-    return{'width': '15%', 'display': 'inline-block', 'align': 'right', 'padding': '1px',
+    return{'width': f'{width}%',
+           'display': 'inline-block',
+           'align': 'center',
+           'padding': '10px',
            'boxShadow': boxshadow,
            'borderRadius': '10px',
            'overflow': 'hidden',
-           'height': 250}
+           }
 
 
 def FILLER():
@@ -131,3 +145,39 @@ def conditional_box(id, formula):
                                     ]
 
         )], style={'width': '25%', 'display': 'inline-block', 'align': 'left', 'padding': "20px"})
+
+
+def apply_theme_to_figure(figure, dark_mode):
+    fig = figure.copy()
+
+    dark_bg = 'rgba(30, 30, 30, 0.9)'
+    light_bg = 'white'
+    dark_font = '#ddd'
+    light_font = '#212529'
+
+    # If figure is a Plotly Figure, convert to dict
+    if hasattr(fig, 'to_dict'):
+        fig = fig.to_dict()
+
+    # Prepare layout if missing
+    layout = fig.get('layout', {})
+
+    if dark_mode:
+        layout.update({
+            'paper_bgcolor': dark_bg,
+            'plot_bgcolor': dark_bg,
+            'font': {'color': dark_font},
+            'xaxis': {**layout.get('xaxis', {}), 'color': dark_font},
+            'yaxis': {**layout.get('yaxis', {}), 'color': dark_font},
+        })
+    else:
+        layout.update({
+            'paper_bgcolor': light_bg,
+            'plot_bgcolor': light_bg,
+            'font': {'color': light_font},
+            'xaxis': {**layout.get('xaxis', {}), 'color': light_font},
+            'yaxis': {**layout.get('yaxis', {}), 'color': light_font},
+        })
+
+    fig['layout'] = layout
+    return fig

@@ -1,9 +1,16 @@
 import Styles
 import DataHandler as dh
 from dash import dcc, html
+from main import cursor
 
 
 def render_page_content():
+    cursor.execute("SELECT theme FROM User_Theme WHERE id = 1")
+    theme = cursor.fetchone()[0]
+    if theme == "dark":
+        colorBG = ["black"]
+    else:
+        colorBG = ["white"]
     return html.Div([
         html.Div(children=[
             html.Div([
@@ -14,24 +21,51 @@ def render_page_content():
             html.Div([
                 html.H4(f"{dh.currentYear - 1}"),
                 dcc.Graph(
-                    id='Activity Type Distribution',
-                    figure={'data': [
-                        {'values': dh.mostUsedActivityType(dh.currentYear - 1)[2],
-                         'labels': dh.mostUsedActivityType(dh.currentYear - 1)[0],
-                         'marker': {'colors': dh.mostUsedActivityType(dh.currentYear - 1)[5]},
-                         'type': 'pie', 'layout': {'margin': dict(t=0, b=100, l=0, r=0)}}]}),
-            ], style=Styles.STYLE(49)),
+                    id='graph-container',
+                    figure={
+                        'data': [{
+                            'type': 'bar',
+                            'x': dh.mostUsedActivityType(dh.currentYear - 1)[2],  # counts or values for bars
+                            'y': dh.mostUsedActivityType(dh.currentYear - 1)[0],  # labels for bars
+                            'orientation': 'h',
+                            'marker': {'color': dh.mostUsedActivityType(dh.currentYear - 1)[5]},
+                        }],
+                        'layout': {
+                            'title': f'Activity Type Distribution in {dh.currentYear - 1}',
+                            'margin': {'t': 30, 'b': 100, 'l': 100, 'r': 30},
+                            'yaxis': {'autorange': 'reversed'},  # so top label is first
+                            'xaxis': {'title': 'Count'},
+                            'yaxis_title': 'Activity Type',
+                            'plot_bgcolor': colorBG[0],  # background color inside the plotting area
+                            'paper_bgcolor': colorBG[0],  # background color around
+                        }
+                    }
+                )
+            ], id="graph-container"),
             html.Div([''], style=Styles.FILLER()),
             html.Div([
-                html.H4(f"{dh.currentYear}"),
+                html.H4(f"{dh.currentYear - 0}"),
                 dcc.Graph(
                     id='Activity Type Distribution',
-                    figure={'data': [
-                        {'values': dh.mostUsedActivityType(dh.currentYear)[2],
-                         'labels': dh.mostUsedActivityType(dh.currentYear)[0],
-                         'marker': {'colors': dh.mostUsedActivityType(dh.currentYear)[5]},
-                         'type': 'pie', 'layout': {'margin': dict(t=0, b=100, l=0, r=0)}}]}),
-            ], style=Styles.STYLE(49)),
+                    figure={
+                        'data': [{
+                            'type': 'bar',
+                            'x': dh.mostUsedActivityType(dh.currentYear - 0)[2],  # counts or values for bars
+                            'y': dh.mostUsedActivityType(dh.currentYear - 0)[0],  # labels for bars
+                            'orientation': 'h',
+                            'marker': {'color': dh.mostUsedActivityType(dh.currentYear - 1)[5]},
+                        }],
+                        'layout': {
+                            'title': f'Activity Type Distribution in {dh.currentYear - 0}',
+                            'margin': {'t': 30, 'b': 100, 'l': 100, 'r': 30},
+                            'yaxis': {'autorange': 'reversed'},  # so top label is first
+                            'xaxis': {'title': 'Count'},
+                            'yaxis_title': 'Activity Type',
+                        }
+                    }
+                )
+            ], id="graph-container"),
+            html.Hr(),
             html.Div([
                 Styles.kpiboxes(f'Total Activities ({dh.currentYear - 1} / {dh.currentYear}):',
                                 f'{int(dh.Totals("all", dh.currentYear - 1).get_nrOfActivities())} '
