@@ -1,5 +1,5 @@
 import pandas as pd  # for data handling
-from datetime import datetime, date  # for getting the current year
+from datetime import datetime, date, timedelta  # for getting the current year
 import Styles  # for styling and coloring
 import requests  # for getting weather data
 
@@ -16,11 +16,14 @@ def dataCleaner(activityType, year):  # --> string: Can be [Ride, Run, Walk, Hik
     df.insert(1, "month", "")
     df['month'] = df['Activity Date'].dt.month
 
-    if activityType == "all":
-        return df.loc[df['year'] == year]
+    if year != "all":
+        if activityType == "all":
+            return df.loc[df['year'] == year]
+        else:
+            df = df.loc[df['Activity Type'] == activityType]
+            return df.loc[df['year'] == year]
     else:
-        df = df.loc[df['Activity Type'] == activityType]
-        return df.loc[df['year'] == year]
+        return df
 
 
 
@@ -208,3 +211,40 @@ def activity_rain_sun_ratio():
 
     ratio = rainy_days / sunny_days
     return ratio
+
+
+def longest_workout_streak():
+    df = dataCleaner("all", "all")
+
+    unique_days = sorted(df['Activity Date'].unique())
+
+    # Edge case: no workouts
+    if not unique_days:
+        return 0
+
+    # Find the longest streak
+    streak = max_streak = 1
+    for i in range(1, len(unique_days)):
+        if (unique_days[i] - unique_days[i-1]).days == 1:
+            streak += 1
+            if streak > max_streak:
+                max_streak = streak
+        else:
+            streak = 1
+
+    return max_streak
+
+
+def current_workout_streak():
+    df = dataCleaner("all", "all")
+
+    streak = 0
+    today = date.today()
+
+    # While the day is found in set, increment streak and go to previous day
+    current_day = today
+    while current_day in df["Activity Date"].to_list():
+        streak += 1
+        current_day -= timedelta(days=1)
+    return streak
+

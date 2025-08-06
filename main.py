@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output, State
 from dash import dcc, html, dash_table
 import page_sportsType
 import page_sportsOverview
+import page_sportsDetails
 import page_about
 import base64, io
 import pandas as pd
@@ -159,11 +160,7 @@ def render_content(tab):
         ])
     elif tab == 'tab-3':
         return html.Div([
-            html.H3('Are you only working out during good weather?'),
-            html.H5('Your bad weather ratio:'),
-            html.Hr(),
-            html.H2(f"You are working out in the rain: {round(dh.activity_rain_sun_ratio(),2)} % of the time."),
-            html.Hr()
+            page_sportsDetails.render_page_content(),
         ])
 
 
